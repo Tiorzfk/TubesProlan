@@ -706,6 +706,7 @@ public class penyewaanForm extends javax.swing.JFrame {
                 rs = pst.executeQuery(query);
                 rs.next();
                 
+                int jenkel = Integer.parseInt(rs.getString("jenisKelamin"));
                 field_no_ktp.setText(rs.getString("noKTP"));
                 field_nama.setText(rs.getString("nama"));
                 field_tgl_lahir.setText(rs.getString("tanggalLahir"));
@@ -715,6 +716,12 @@ public class penyewaanForm extends javax.swing.JFrame {
                 field_telepon.setText(rs.getString("telepon"));
                 field_email.setText(rs.getString("email"));
                 field_no_hp.setText(rs.getString("handphone"));
+                
+                if (jenkel  == 1) {
+                    field_jk.setText("Perempuan");
+                }else{
+                    field_jk.setText("Laki-laki");
+                }
                 mdbc.close(rs);
             } catch (SQLException e) {
                 System.out.println("Error inside `viewTableMouseClicked` : "

@@ -63,8 +63,8 @@ public class penyewaanTable extends javax.swing.JFrame {
         viewTable.setModel(model);
         
         // leave only 4 column in table
-        for (int i = 4; i < 4; i++) {
-            TableColumn col = viewTable.getColumnModel().getColumn(4);
+        for (int i = 6; i < 6; i++) {
+            TableColumn col = viewTable.getColumnModel().getColumn(6);
             viewTable.getColumnModel().removeColumn(col);
         }
         
@@ -364,7 +364,7 @@ public class penyewaanTable extends javax.swing.JFrame {
 
         dataDetailPanel.add(jPanel14);
 
-        dataDetailPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Detail Penyewaan"));
+        dataDetailPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Detail Mobil"));
         dataDetailPanel2.setLayout(new java.awt.GridLayout(5, 2, 40, 10));
 
         jPanel23.setLayout(new java.awt.GridLayout(1, 2, 10, 0));
@@ -671,13 +671,15 @@ public class penyewaanTable extends javax.swing.JFrame {
         if (row != -1) {
             PenyewaanTableModel model = (PenyewaanTableModel) viewTable.getModel();
             
-            String noKTP = model.getValueAt(row, 0).toString();
+            String noKTP = model.getValueAt(row, 2).toString();
+            String noPolisi = model.getValueAt(row, 1).toString();
+
+            PreparedStatement pst = null;
+            mdbc = new MyDBConnection();
+            mdbc.init();
+            Connection conn =mdbc.getMyConnection();
             
             try {
-                PreparedStatement pst = null;
-                mdbc = new MyDBConnection();
-                mdbc.init();
-                Connection conn =mdbc.getMyConnection();
                 String query = "SELECT noKTP,nama,jenisKelamin,tanggalLahir,pekerjaan,alamat,namaKota,telepon,handphone,email FROM pelanggan INNER JOIN kota on kota.idKota = pelanggan.idKota WHERE noKTP = '"
                         + noKTP + "'";
                 pst = conn.prepareStatement(query);
@@ -700,6 +702,30 @@ public class penyewaanTable extends javax.swing.JFrame {
                 field_telepon.setText(rs.getString("telepon"));
                 field_email.setText(rs.getString("email"));
                 field_no_hp.setText(rs.getString("handphone"));
+                mdbc.close(rs);
+            } catch (SQLException e) {
+                System.out.println("Error inside `viewTableMouseClicked` : "
+                    + e.getMessage());
+            }
+            
+            try {
+                String query = "SELECT* FROM mobil WHERE noPolisi = '"
+                        + noPolisi + "'";
+                pst = conn.prepareStatement(query);
+                rs = pst.executeQuery(query);
+                rs.next();
+                
+                noPolisiField.setText(rs.getString("noPolisi"));
+                merkField.setText(rs.getString("merk"));
+                warnaField.setText(rs.getString("warna"));
+                tahunField.setText(rs.getString("tahun"));
+                hargaSewa12JamField.setText(rs.getString("hargaSewa12Jam"));
+                hargaSewa24JamField.setText(rs.getString("hargaSewa24Jam"));
+                dendaPerJamField.setText(rs.getString("dendaPerJam"));
+                statusField.setText(
+                        Integer.valueOf(rs.getString("status")) == MobilTableModel.STATUS_TERSEDIA
+                        ? "Tersedia" : "Tidak Tersedia"
+                );
                 mdbc.close(rs);
             } catch (SQLException e) {
                 System.out.println("Error inside `viewTableMouseClicked` : "

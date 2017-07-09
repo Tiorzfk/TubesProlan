@@ -18,14 +18,15 @@ public class PenyewaanTableModel extends MyAbstractModel {
     public static final String      table        = "sewa";
     public static final int         dataPerPage  = 5;
     
-    private int colnum = 5;
+    private int colnum = 6;
     private int rownum;
     private String[] colname = {
         "idSewa",
         "noPolisi",
         "noKTP",
         "tanggalSewa",
-        "tanggalKembali"
+        "tanggalKembali",
+        "totalBayar"
     };
     private ArrayList<String[]> Result_Sets;
 
@@ -44,7 +45,8 @@ public class PenyewaanTableModel extends MyAbstractModel {
                     rs.getString("noPolisi"),
                     rs.getString("noKTP"),
                     rs.getString("tanggalSewa"),
-                    rs.getString("tanggalKembali")
+                    rs.getString("tanggalKembali"),
+                    rs.getString("totalBayar")
                 };
                 Result_Sets.add(row);
             }
