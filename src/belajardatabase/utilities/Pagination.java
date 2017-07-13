@@ -121,6 +121,7 @@ public class Pagination {
         countPageCount(); // if SQL change, the page count also.
         
         GUIComponent.updateComboBox();
+        GUIComponent.updateLabel();
         
         return getNewOffset(currentPage);
     }
@@ -138,7 +139,7 @@ public class Pagination {
         int tmp_offset      = (int) model.sql.select.get("offset");
         
         // [2] change
-        model.sql.select.select("count(noPolisi) as num_rows");
+        model.sql.select.select("count(*) as num_rows");
         model.sql.select.removeLimit();
         ResultSet rs = model.sql.select.execute();
         

@@ -12,6 +12,8 @@ import belajardatabase.pelanggan.*;
 import belajardatabase.penyewaan.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 /**
  *
@@ -36,7 +38,6 @@ public class mainWindow extends javax.swing.JFrame {
         javax.swing.JPanel en = new entry();
 
         this.setContentPane(en);
-        
     }
     
     public void callMe(myInterface f) {
@@ -152,12 +153,14 @@ public class mainWindow extends javax.swing.JFrame {
         javax.swing.JPanel en = new view2();
 
         this.setContentPane(en);
+        updateLookAndFeel();
     }//GEN-LAST:event_mobil_listingMenuItemActionPerformed
 
     private void mobil_tambahMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mobil_tambahMenuItemActionPerformed
         javax.swing.JPanel en = new entry();
 
         this.setContentPane(en);
+        updateLookAndFeel();
     }//GEN-LAST:event_mobil_tambahMenuItemActionPerformed
 
     private void menuPelanggan_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPelanggan_tambahActionPerformed
@@ -165,6 +168,7 @@ public class mainWindow extends javax.swing.JFrame {
         javax.swing.JFrame en = new pelangganForm();
 
         this.setContentPane(en);
+        updateLookAndFeel();
     }//GEN-LAST:event_menuPelanggan_tambahActionPerformed
 
     private void menuPelanggan_listingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPelanggan_listingActionPerformed
@@ -172,13 +176,15 @@ public class mainWindow extends javax.swing.JFrame {
         javax.swing.JFrame en = new pelangganTable();
 
         this.setContentPane(en);
+        updateLookAndFeel();
     }//GEN-LAST:event_menuPelanggan_listingActionPerformed
 
     private void penyeasdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penyeasdActionPerformed
         // TODO add your handling code here:
-        javax.swing.JFrame en = new pelangganTable();
+        javax.swing.JPanel en = new belajardatabase.penyewaan.view(this);
 
         this.setContentPane(en);
+        updateLookAndFeel();
     }//GEN-LAST:event_penyeasdActionPerformed
 
     private void menuPenyewaan_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPenyewaan_tambahActionPerformed
@@ -186,6 +192,7 @@ public class mainWindow extends javax.swing.JFrame {
         javax.swing.JFrame en = new penyewaanForm();
 
         this.setContentPane(en);
+        updateLookAndFeel();
     }//GEN-LAST:event_menuPenyewaan_tambahActionPerformed
 
     /**
@@ -218,9 +225,20 @@ public class mainWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new mainWindow().setVisible(true);
+                try { 
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
+                } catch (Exception ex) { 
+                    ex.printStackTrace(); 
+                }
+                javax.swing.JFrame myFrame = new mainWindow();
+                myFrame.setVisible(true);
+                SwingUtilities.updateComponentTreeUI(myFrame);
             }
         });
+    }
+    
+    private void updateLookAndFeel() {
+        SwingUtilities.updateComponentTreeUI(getContentPane());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

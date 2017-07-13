@@ -145,6 +145,12 @@ public class SelectSQL {
      * for Grouping WHERE SQL example, see method `whereGroupingStart`
      */
     public void where(String column, String operator, Object value) {
+        System.out.println("where = " + this._where);
+        if (this._where.equals("1=1")) {
+            System.out.println("hello world");
+            this._where += " AND ";
+        }
+        
         if (value instanceof Integer) {
             addWhere(column, operator, (int) value, null);
         }

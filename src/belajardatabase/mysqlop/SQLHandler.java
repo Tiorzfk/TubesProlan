@@ -46,6 +46,19 @@ public class SQLHandler {
                     + e.getMessage());
         }
     }
+    
+    /**
+     * call this when you not needed the DB connection
+     * 
+     */
+    public void closeDBConnection() {
+        mdbc.close(stmt);
+        mdbc.destroy();
+    }
+    
+    public MyDBConnection getConnection() {
+        return mdbc;
+    }
 
     public MyDBConnection mdbc;
     private Statement stmt;

@@ -8,7 +8,10 @@ package belajardatabase.model;
 
 import static belajardatabase.model.MobilTableModel.table;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  *
@@ -18,7 +21,7 @@ public class PelangganTableModel extends MyAbstractModel {
     public static final String      table        = "pelanggan";
     public static final int         dataPerPage  = 5;
     
-    private int colnum = 8;
+    private int colnum = 10;
     private int rownum;
     private String[] colname = {
         "noKTP",
@@ -40,14 +43,14 @@ public class PelangganTableModel extends MyAbstractModel {
     
     public void save(ResultSet rs) {
         Result_Sets = new ArrayList<String[]>();
-        
+        String tanggalLahir = "";
         try {
-            
             while (rs.next()) {
+                tanggalLahir = parseDate(rs.getDate("tanggalLahir"));
                 String[] row = {
                     rs.getString("noKTP"),
                     rs.getString("nama"),
-                    rs.getString("tanggalLahir"),
+                    tanggalLahir,
                     rs.getString("pekerjaan"),
                     rs.getString("alamat"),
                     rs.getString("jenisKelamin"),
@@ -84,6 +87,7 @@ public class PelangganTableModel extends MyAbstractModel {
     public String getColumnName(int index) {
         return colname[index];
     }
+    
     public int getNumberOfPage() {
         // [1] backup
         String tmp_select   = (String) this.sql.select.get("select");
@@ -115,4 +119,25 @@ public class PelangganTableModel extends MyAbstractModel {
         
         return num_page;
     }
+    
+    public String parseDate(Date d) throws ParseException {
+        String result = "";
+        
+        try {
+            String dateString = d.toString();
+
+            SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+            Date date = (Date) inputFormat.parse(dateString);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("EEEE, dd.MM.yyyy", Locale.US);
+            result = outputFormat.format(date);
+        } catch (ParseException e) {
+            System.out.println("Error inside `parseDate`: "
+                + e.getMessage());
+        }
+        return result;
+    }
+    
+    /* constant property */
+    public static final int PRIA = 0;
+    public static final int PEREMPUAN = 1;
 }
