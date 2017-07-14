@@ -18,7 +18,7 @@ import javax.swing.table.TableColumn;
  * @author ASEP
  */
 public class view2 extends javax.swing.JPanel {
-MobilTableModel model = null;
+    MobilTableModel model = null;
     Pagination      pagination = null;
 
     /**
@@ -494,6 +494,7 @@ MobilTableModel model = null;
         model.sql.select.offset(newOffset);
         ResultSet rs = model.sql.select.execute();
         model.save(rs);
+        model.sql.getConnection().close(rs);
 
         updateTable();
     }//GEN-LAST:event_TerapkanButtonActionPerformed

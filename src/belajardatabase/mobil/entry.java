@@ -9,7 +9,6 @@ package belajardatabase.mobil;
 import belajardatabase.model.MobilTableModel;
 import belajardatabase.mysqlop.InsertSQL;
 import belajardatabase.utilities.ActionValidator;
-import belajardatabase.utilities.InputValidator;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -19,7 +18,7 @@ import java.sql.SQLException;
  */
 public class entry extends javax.swing.JPanel {
     MobilTableModel model       = null;
-    InputValidator  validator   = null;
+    //InputValidator  validator   = null;
 
     /**
      * Creates new form entry
@@ -35,14 +34,14 @@ public class entry extends javax.swing.JPanel {
     }
     
     public void initValidator() {   
-        validator = new InputValidator();
+        /* validator = new InputValidator();
         
         try {
             validator.field(noPolisiField, "No Polisi");
             validator.addRule("required", true);
      
             validator.end();
-            /*
+            
             validator.field(merkField, "merk");
             validator.addRule("required", true);
             validator.addRule("valid_input", "alphanumeric_only");
@@ -85,10 +84,11 @@ public class entry extends javax.swing.JPanel {
                 "Tidak Tersedia"
             });
             validator.end();
-            */
+            
         } catch (Exception e) {
             System.out.println("Error insisde `initValidator`: " + e.getMessage());
         }
+        */
     }
 
     /**

@@ -9,8 +9,8 @@ package belajardatabase.pelanggan;;
 import belajardatabase.model.MobilTableModel;
 import belajardatabase.mysqlop.MyDBConnection;
 import belajardatabase.model.PelangganTableModel;
-import belajardatabase.utilities.PaginationPelanggan;
-import belajardatabase.utilities.PaginationPelangganGUIComponent;
+import belajardatabase.utilities.Pagination;
+import belajardatabase.utilities.PaginationGUIComponent;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
@@ -27,7 +27,7 @@ import javax.swing.table.TableColumn;
  */
 public class pelangganTable extends javax.swing.JFrame {
     PelangganTableModel model = null;
-    PaginationPelanggan      pagination = null;
+    Pagination          pagination = null;
 
     /** Creates new form pelangganTable */
     public pelangganTable() {
@@ -50,7 +50,7 @@ public class pelangganTable extends javax.swing.JFrame {
     }
     
     public void initPagination() {
-        pagination = new PaginationPelanggan();
+        pagination = new Pagination();
         pagination.setModel(model);
         pagination.setPageLength(model.dataPerPage);
         pagination.GUIComponent.setLabel(positionPaginationLabel);
@@ -513,7 +513,7 @@ public class pelangganTable extends javax.swing.JFrame {
         
         if (evt.getStateChange() == ItemEvent.DESELECTED &&
             pagination.GUIComponent.getComboBoxStatus() ==
-                PaginationPelangganGUIComponent.COMBOBOX_ACCEPT_ANY_ACTION)
+                PaginationGUIComponent.COMBOBOX_ACCEPT_ANY_ACTION)
         {
             System.out.println("Posisi " + "paginationComboBox");
             
