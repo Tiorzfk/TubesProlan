@@ -11,22 +11,32 @@ import belajardatabase.mysqlop.InsertSQL;
 import belajardatabase.utilities.ActionValidator;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author ASEP
  */
-public class entry extends javax.swing.JPanel {
-    MobilTableModel model       = null;
+public class Entry extends javax.swing.JPanel {
+    MobilTableModel     model   = null;
+    javax.swing.JFrame  frame   = null;
     //InputValidator  validator   = null;
 
     /**
      * Creates new form entry
      */
-    public entry() {
+    public Entry(javax.swing.JFrame frame) {
         initComponents();
         initModel();
         //initValidator();
+        
+        // listen when mainWindow is closed
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                model.sql.closeDBConnection();
+            }
+        });
     }
     
     public void initModel() {
@@ -226,7 +236,13 @@ public class entry extends javax.swing.JPanel {
                 MobilTableModel.STATUS_TERSEDIA :
                 MobilTableModel.STATUS_TIDAK_TERSEDIA
         );
-        model.sql.insert.execute();
+        
+        boolean success = model.sql.insert.execute();
+        
+        String pesan = "Gagal menambah data";
+        if (success) pesan = "Sukses menambah data";
+        
+        JOptionPane.showMessageDialog(frame, pesan);
     }//GEN-LAST:event_simpanButtonActionPerformed
 
 

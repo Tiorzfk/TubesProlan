@@ -14,7 +14,7 @@ import java.sql.*;
  */
 public class MyDBConnection {
     private String driver = "com.mysql.jdbc.Driver";
-    private String url = "jdbc:mysql://localhost/penyewaan_mobil";
+    private String url = "jdbc:mysql://localhost/penyewaan_mobil?zeroDateTimeBehavior=convertToNull";
     private String username = "root";
     private String password = "";
     private Connection conn = null;

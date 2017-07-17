@@ -6,7 +6,6 @@
 
 package belajardatabase;
 
-import belajardatabase.pelanggan.pelangganForm;
 import belajardatabase.mobil.*;
 import belajardatabase.pelanggan.*;
 import belajardatabase.penyewaan.*;
@@ -19,7 +18,7 @@ import javax.swing.UIManager;
  *
  * @author ASEP
  */
-public class mainWindow extends javax.swing.JFrame {
+public class MainWindow extends javax.swing.JFrame {
 
     interface myInterface {
         public int myNumber();
@@ -28,14 +27,14 @@ public class mainWindow extends javax.swing.JFrame {
     /**
      * Creates new form mainWindow
      */
-    public mainWindow() {
+    public MainWindow() {
         Pattern p = Pattern.compile("[^a-zA-Z0-9]");
         Matcher m = p.matcher("45");
        
         System.out.println("tes = " + (m.find() == true ? "match" : "not match"));
          
         initComponents();
-        javax.swing.JPanel en = new entry();
+        javax.swing.JPanel en = new belajardatabase.mobil.Entry(this);
 
         this.setContentPane(en);
     }
@@ -61,12 +60,12 @@ public class mainWindow extends javax.swing.JFrame {
         menuPelanggan_listing = new javax.swing.JMenuItem();
         menuPelanggan_tambah = new javax.swing.JMenuItem();
         menuPenyewaan_listing = new javax.swing.JMenu();
-        penyeasd = new javax.swing.JMenuItem();
+        penyewaan_listing = new javax.swing.JMenuItem();
+        penyewaan_riwayatSewa = new javax.swing.JMenuItem();
         menuPenyewaan_tambah = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(626, 666));
         setMinimumSize(new java.awt.Dimension(626, 666));
         setSize(new java.awt.Dimension(626, 666));
 
@@ -112,13 +111,21 @@ public class mainWindow extends javax.swing.JFrame {
 
         menuPenyewaan_listing.setText("Penyewaan");
 
-        penyeasd.setText("Listing");
-        penyeasd.addActionListener(new java.awt.event.ActionListener() {
+        penyewaan_listing.setText("Listing");
+        penyewaan_listing.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                penyeasdActionPerformed(evt);
+                penyewaan_listingActionPerformed(evt);
             }
         });
-        menuPenyewaan_listing.add(penyeasd);
+        menuPenyewaan_listing.add(penyewaan_listing);
+
+        penyewaan_riwayatSewa.setText("Riwayat Sewa");
+        penyewaan_riwayatSewa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                penyewaan_riwayatSewaActionPerformed(evt);
+            }
+        });
+        menuPenyewaan_listing.add(penyewaan_riwayatSewa);
 
         menuPenyewaan_tambah.setText("Tambah");
         menuPenyewaan_tambah.addActionListener(new java.awt.event.ActionListener() {
@@ -150,14 +157,14 @@ public class mainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mobil_listingMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mobil_listingMenuItemActionPerformed
-        javax.swing.JPanel en = new view2();
+        javax.swing.JPanel en = new belajardatabase.mobil.View(this);
 
         this.setContentPane(en);
         updateLookAndFeel();
     }//GEN-LAST:event_mobil_listingMenuItemActionPerformed
 
     private void mobil_tambahMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mobil_tambahMenuItemActionPerformed
-        javax.swing.JPanel en = new entry();
+        javax.swing.JPanel en = new belajardatabase.mobil.Entry(this);
 
         this.setContentPane(en);
         updateLookAndFeel();
@@ -165,7 +172,7 @@ public class mainWindow extends javax.swing.JFrame {
 
     private void menuPelanggan_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPelanggan_tambahActionPerformed
         // TODO add your handling code here:
-        javax.swing.JFrame en = new pelangganForm();
+        javax.swing.JPanel en = new belajardatabase.pelanggan.Entry(this);
 
         this.setContentPane(en);
         updateLookAndFeel();
@@ -173,27 +180,35 @@ public class mainWindow extends javax.swing.JFrame {
 
     private void menuPelanggan_listingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPelanggan_listingActionPerformed
         // TODO add your handling code here:
-        javax.swing.JFrame en = new pelangganTable();
+        javax.swing.JPanel en = new belajardatabase.pelanggan.View(this);
 
         this.setContentPane(en);
         updateLookAndFeel();
     }//GEN-LAST:event_menuPelanggan_listingActionPerformed
 
-    private void penyeasdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penyeasdActionPerformed
+    private void penyewaan_listingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penyewaan_listingActionPerformed
         // TODO add your handling code here:
-        javax.swing.JPanel en = new belajardatabase.penyewaan.view(this);
+        javax.swing.JPanel en = new belajardatabase.penyewaan.ViewSewaAktif(this);
 
         this.setContentPane(en);
         updateLookAndFeel();
-    }//GEN-LAST:event_penyeasdActionPerformed
+    }//GEN-LAST:event_penyewaan_listingActionPerformed
 
     private void menuPenyewaan_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPenyewaan_tambahActionPerformed
         // TODO add your handling code here:
-        javax.swing.JFrame en = new penyewaanForm();
+        javax.swing.JPanel en = new belajardatabase.penyewaan.Entry(this);
 
         this.setContentPane(en);
         updateLookAndFeel();
     }//GEN-LAST:event_menuPenyewaan_tambahActionPerformed
+
+    private void penyewaan_riwayatSewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penyewaan_riwayatSewaActionPerformed
+        // TODO add your handling code here:
+        javax.swing.JPanel en = new belajardatabase.penyewaan.ViewRiwayatSewa(this);
+
+        this.setContentPane(en);
+        updateLookAndFeel();
+    }//GEN-LAST:event_penyewaan_riwayatSewaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,13 +227,13 @@ public class mainWindow extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(mainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(mainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(mainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(mainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -230,14 +245,14 @@ public class mainWindow extends javax.swing.JFrame {
                 } catch (Exception ex) { 
                     ex.printStackTrace(); 
                 }
-                javax.swing.JFrame myFrame = new mainWindow();
+                javax.swing.JFrame myFrame = new MainWindow();
                 myFrame.setVisible(true);
                 SwingUtilities.updateComponentTreeUI(myFrame);
             }
         });
     }
     
-    private void updateLookAndFeel() {
+    public void updateLookAndFeel() {
         SwingUtilities.updateComponentTreeUI(getContentPane());
     }
 
@@ -252,6 +267,7 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuPenyewaan_tambah;
     private javax.swing.JMenuItem mobil_listingMenuItem;
     private javax.swing.JMenuItem mobil_tambahMenuItem;
-    private javax.swing.JMenuItem penyeasd;
+    private javax.swing.JMenuItem penyewaan_listing;
+    private javax.swing.JMenuItem penyewaan_riwayatSewa;
     // End of variables declaration//GEN-END:variables
 }

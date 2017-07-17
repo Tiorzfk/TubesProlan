@@ -43,7 +43,7 @@ public class MobilTableModel extends MyAbstractModel {
                 String[] row = {
                     rs.getString("noPolisi"),
                     rs.getString("merk"),
-                    rs.getString("hargaSewa12Jam"),
+                    "Tidak Tersedia",
                     rs.getString("hargaSewa24Jam"),
                     rs.getString("warna"),
                     rs.getString("tahun").substring(0, 4),
