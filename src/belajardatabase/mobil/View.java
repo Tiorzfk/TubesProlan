@@ -114,8 +114,6 @@ public class View extends javax.swing.JPanel {
         TerapkanButton = new javax.swing.JButton();
         pencarianField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        tambahButton = new javax.swing.JButton();
-        sewakanButton = new javax.swing.JButton();
         viewScrollPane = new javax.swing.JScrollPane();
         viewTable = new javax.swing.JTable();
         lastPaginationButton = new javax.swing.JButton();
@@ -253,12 +251,6 @@ public class View extends javax.swing.JPanel {
         });
 
         jLabel2.setText("Pencarian :");
-
-        tambahButton.setText("Tambah");
-
-        sewakanButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\ASEP\\Downloads\\1498309121_system-config-root.png")); // NOI18N
-        sewakanButton.setText("Sewakan");
-        sewakanButton.setEnabled(false);
 
         viewTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         viewTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -430,11 +422,7 @@ public class View extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tambahButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sewakanButton))
+                        .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(firstPaginationButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -457,14 +445,10 @@ public class View extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(opsiPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(tambahButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(sewakanButton, javax.swing.GroupLayout.Alignment.TRAILING)))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(viewScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -574,7 +558,6 @@ public class View extends javax.swing.JPanel {
                 ? "Tersedia" : "Tidak Tersedia"
             );
 
-            sewakanButton.setEnabled(true);
             ubahButton.setEnabled(true);
             hapusButton.setEnabled(true);
         }
@@ -706,7 +689,6 @@ public class View extends javax.swing.JPanel {
         statusField.setText("Pilih baris data");
         ubahButton.setEnabled(false);
         hapusButton.setEnabled(false);
-        sewakanButton.setEnabled(false); // buruk, tidak sesuai dengan method
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -757,11 +739,9 @@ public class View extends javax.swing.JPanel {
     private javax.swing.JLabel positionPaginationLabel;
     private javax.swing.JButton previousPaginationButton;
     private javax.swing.JButton resetButton;
-    private javax.swing.JButton sewakanButton;
     private javax.swing.JTextField statusField;
     private javax.swing.JPanel tableOptionPane;
     private javax.swing.JTextField tahunField;
-    private javax.swing.JButton tambahButton;
     private javax.swing.JButton ubahButton;
     private javax.swing.JScrollPane viewScrollPane;
     private javax.swing.JTable viewTable;
