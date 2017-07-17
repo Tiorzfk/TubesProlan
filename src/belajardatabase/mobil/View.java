@@ -11,6 +11,8 @@ import belajardatabase.utilities.Pagination;
 import belajardatabase.utilities.PaginationGUIComponent;
 import java.awt.event.ItemEvent;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumn;
 
 /**
@@ -21,10 +23,14 @@ public class View extends javax.swing.JPanel {
     MobilTableModel model = null;
     Pagination      pagination = null;
 
+    private javax.swing.JFrame frame = null;
+    
     /**
      * Creates new form view
      */
     public View(javax.swing.JFrame frame) {
+        this.frame = frame;
+        
         initComponents();
         initModel();
         initPagination();
@@ -164,6 +170,7 @@ public class View extends javax.swing.JPanel {
         option_sewa12JamComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { ">=", "<=", ">", "<" }));
         jPanel5.add(option_sewa12JamComboBox);
 
+        option_sewa12JamField.setEditable(false);
         option_sewa12JamField.setText("0");
         jPanel5.add(option_sewa12JamField);
 
@@ -395,10 +402,20 @@ public class View extends javax.swing.JPanel {
 
         ubahButton.setText("Ubah");
         ubahButton.setEnabled(false);
+        ubahButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ubahButtonActionPerformed(evt);
+            }
+        });
         jPanel13.add(ubahButton);
 
         hapusButton.setText("Hapus");
         hapusButton.setEnabled(false);
+        hapusButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hapusButtonActionPerformed(evt);
+            }
+        });
         jPanel13.add(hapusButton);
 
         dataDetailPanel.add(jPanel13);
@@ -432,7 +449,7 @@ public class View extends javax.swing.JPanel {
                         .addComponent(positionPaginationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(dataDetailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(viewScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
-                    .addComponent(opsiPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE))
+                    .addComponent(opsiPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 608, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -635,6 +652,44 @@ public class View extends javax.swing.JPanel {
 
         updateTable();
     }//GEN-LAST:event_firstPaginationButtonActionPerformed
+
+    private void hapusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusButtonActionPerformed
+        int row         = viewTable.getSelectedRow();
+        String merk     = model.getValueAt(row, 1).toString();
+        String noPolisi = model.getValueAt(row, 0).toString();
+        
+        int response = JOptionPane.showConfirmDialog(frame,
+                "Apakah anda ingin menghapus mobil " + merk + " ini?",
+                "Penghapusan Data",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+        
+        if (response == JOptionPane.YES_OPTION) {
+            Delete.delete(noPolisi, frame); // lakukan penghapusan
+            
+            // update table and pagination
+            int newOffset = pagination.updatePagination();
+            pagination.GUIComponent.reinitComboBox();
+            pagination.GUIComponent.update();
+            
+            model.sql.select.offset(newOffset);
+            ResultSet rs = model.sql.select.execute();
+            model.save(rs);
+            model.sql.getConnection().close(rs);
+            updateTable();
+        }
+    }//GEN-LAST:event_hapusButtonActionPerformed
+
+    private void ubahButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ubahButtonActionPerformed
+        int row         = viewTable.getSelectedRow();
+        String noPolisi = model.getValueAt(row, 0).toString();
+        
+        javax.swing.JPanel en = new belajardatabase.mobil.Edit(frame, noPolisi);
+
+        frame.setContentPane(en);
+        SwingUtilities.updateComponentTreeUI(frame.getContentPane());
+    }//GEN-LAST:event_ubahButtonActionPerformed
 
     public void updateTable() {
         model.fireTableDataChanged();

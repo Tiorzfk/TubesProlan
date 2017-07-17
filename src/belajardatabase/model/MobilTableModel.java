@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class MobilTableModel extends MyAbstractModel {
     public static final String      table        = "mobil";
-    public static final int         dataPerPage  = 2;
+    public static final int         dataPerPage  = 5;
     
     private final int  colnum = 8;
     private int rownum;

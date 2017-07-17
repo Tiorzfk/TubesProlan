@@ -89,7 +89,7 @@ public class DateUtility {
         
         try {            
             if (rs.next()) {
-                day = rs.getInt("day");
+                day = Math.abs(rs.getInt("day"));
             } else {
                 // jika tidak ada Jakarta, ganti.
                 System.out.println("Error: didalam getDifferenceBetweenTwoDate,"

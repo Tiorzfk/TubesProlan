@@ -63,7 +63,6 @@ public class MainWindow extends javax.swing.JFrame {
         penyewaan_listing = new javax.swing.JMenuItem();
         penyewaan_riwayatSewa = new javax.swing.JMenuItem();
         menuPenyewaan_tambah = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(626, 666));
@@ -136,9 +135,6 @@ public class MainWindow extends javax.swing.JFrame {
         menuPenyewaan_listing.add(menuPenyewaan_tambah);
 
         jMenuBar1.add(menuPenyewaan_listing);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -258,7 +254,6 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem menuPelanggan_listing;

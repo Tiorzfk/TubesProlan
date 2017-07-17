@@ -554,6 +554,7 @@
         </Container>
         <Component class="javax.swing.JTextField" name="pencarianMobilField">
           <Properties>
+            <Property name="text" type="java.lang.String" value="No. Polisi atau Merk"/>
             <Property name="toolTipText" type="java.lang.String" value="Kotak Pencarian"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.CompoundBorderInfo">
@@ -596,6 +597,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="pencarianPelangganField">
           <Properties>
+            <Property name="text" type="java.lang.String" value="No KTP atau Nama"/>
             <Property name="toolTipText" type="java.lang.String" value="Kotak Pencarian"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.CompoundBorderInfo">

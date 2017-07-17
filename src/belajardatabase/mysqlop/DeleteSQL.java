@@ -9,7 +9,7 @@ package belajardatabase.mysqlop;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-class DeleteSQL {
+public class DeleteSQL {
     private String table = "";
     private String _where = "";
     
@@ -32,14 +32,17 @@ class DeleteSQL {
         }
     }
     
-    public void execute() {
-         try {
+    public boolean execute() {
+        try {
             String query = "DELETE FROM " + table + _where;
             stmt.executeUpdate(query);
         } catch (SQLException e) { 
             System.out.println("Error inside `execute` : "
                 + e.getMessage());
+            return false;
         }
+        
+        return true;
     }
     
     private MyDBConnection mdbc;

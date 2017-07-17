@@ -7,12 +7,13 @@
 package belajardatabase.pelanggan;
 
 import belajardatabase.model.KotaTableModel;
-import belajardatabase.model.MobilTableModel;
 import belajardatabase.model.PelangganTableModel;
 import belajardatabase.utilities.Pagination;
 import belajardatabase.utilities.PaginationGUIComponent;
 import java.awt.event.ItemEvent;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumn;
 
 /**
@@ -23,10 +24,14 @@ public class View extends javax.swing.JPanel {
     PelangganTableModel model       = null;
     Pagination          pagination  = null;
 
+    private javax.swing.JFrame frame = null;
+    
     /**
      * Creates new form view
      */
     public View(javax.swing.JFrame frame) {
+        this.frame = frame;
+        
         initComponents();
         initModel();
         initPagination();
@@ -84,7 +89,6 @@ public class View extends javax.swing.JPanel {
 
         pencarianField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        tambahButton = new javax.swing.JButton();
         viewScrollPane = new javax.swing.JScrollPane();
         viewTable = new javax.swing.JTable();
         lastPaginationButton = new javax.swing.JButton();
@@ -130,6 +134,7 @@ public class View extends javax.swing.JPanel {
 
         setMaximumSize(new java.awt.Dimension(626, 666));
         setMinimumSize(new java.awt.Dimension(626, 666));
+        setPreferredSize(new java.awt.Dimension(626, 666));
 
         pencarianField.setToolTipText("Kotak Pencarian");
         pencarianField.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.lightGray), javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5), javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 16, new javax.swing.ImageIcon("C:\\Users\\ASEP\\Downloads\\1498141047_icon-111-search.png"))))); // NOI18N
@@ -141,8 +146,6 @@ public class View extends javax.swing.JPanel {
         });
 
         jLabel2.setText("Pencarian :");
-
-        tambahButton.setText("Tambah");
 
         viewTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         viewTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -308,10 +311,20 @@ public class View extends javax.swing.JPanel {
 
         ubahButton.setText("Ubah");
         ubahButton.setEnabled(false);
+        ubahButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ubahButtonActionPerformed(evt);
+            }
+        });
         jPanel13.add(ubahButton);
 
         hapusButton.setText("Hapus");
         hapusButton.setEnabled(false);
+        hapusButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hapusButtonActionPerformed(evt);
+            }
+        });
         jPanel13.add(hapusButton);
 
         dataDetailPanel.add(jPanel13);
@@ -322,38 +335,37 @@ public class View extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tambahButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(firstPaginationButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(previousPaginationButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(paginationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(nextPaginationButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lastPaginationButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(positionPaginationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dataDetailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(viewScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 608, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(firstPaginationButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(previousPaginationButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(paginationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(nextPaginationButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lastPaginationButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(positionPaginationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(viewScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 608, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(8, 8, 8))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(tambahButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(viewScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -408,9 +420,6 @@ public class View extends javax.swing.JPanel {
             String pekerjaan = model.getValueAt(row, 3).toString();
             String alamat = model.getValueAt(row, 4).toString();
             String jenisKelamin = model.getValueAt(row, 5).toString();
-            
-            
-            
             String idKota = model.getValueAt(row, 6).toString();
             String telepon = model.getValueAt(row, 7).toString();
             String handphone = model.getValueAt(row, 8).toString();
@@ -515,6 +524,46 @@ public class View extends javax.swing.JPanel {
         updateTable();
     }//GEN-LAST:event_firstPaginationButtonActionPerformed
 
+    private void ubahButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ubahButtonActionPerformed
+        // TODO add your handling code here:
+        int row         = viewTable.getSelectedRow();
+        String noKTP    = model.getValueAt(row, 0).toString();
+        
+        javax.swing.JPanel en = new belajardatabase.pelanggan.Edit(frame, noKTP);
+
+        frame.setContentPane(en);
+        SwingUtilities.updateComponentTreeUI(frame.getContentPane());
+    }//GEN-LAST:event_ubahButtonActionPerformed
+
+    private void hapusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusButtonActionPerformed
+        // TODO add your handling code here:
+        int row         = viewTable.getSelectedRow();
+        String nama     = model.getValueAt(row, 1).toString();
+        String noKTP    = model.getValueAt(row, 0).toString();
+        
+        int response = JOptionPane.showConfirmDialog(frame,
+                "Apakah anda ingin menghapus pelanggan (" + nama + ") ini?",
+                "Penghapusan Data",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+        
+        if (response == JOptionPane.YES_OPTION) {
+            Delete.delete(noKTP, frame); // lakukan penghapusan
+            
+            // update table and pagination
+            int newOffset = pagination.updatePagination();
+            pagination.GUIComponent.reinitComboBox();
+            pagination.GUIComponent.update();
+            
+            model.sql.select.offset(newOffset);
+            ResultSet rs = model.sql.select.execute();
+            model.save(rs);
+            model.sql.getConnection().close(rs);
+            updateTable();
+        }
+    }//GEN-LAST:event_hapusButtonActionPerformed
+
     public void updateTable() {
         model.fireTableDataChanged();
     }
@@ -574,7 +623,6 @@ public class View extends javax.swing.JPanel {
     private javax.swing.JTextField pencarianField;
     private javax.swing.JLabel positionPaginationLabel;
     private javax.swing.JButton previousPaginationButton;
-    private javax.swing.JButton tambahButton;
     private javax.swing.JTextField tanggalLahirField;
     private javax.swing.JTextField teleponField;
     private javax.swing.JButton ubahButton;

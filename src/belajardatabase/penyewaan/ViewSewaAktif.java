@@ -21,6 +21,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumn;
 
@@ -201,13 +202,14 @@ public class ViewSewaAktif extends javax.swing.JPanel {
         pencarianField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         tutupPenyewaanButton = new javax.swing.JButton();
+        hapusButton = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(626, 666));
         setMinimumSize(new java.awt.Dimension(626, 666));
         setPreferredSize(new java.awt.Dimension(626, 666));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setText("Tabel Penyewaan");
+        jLabel1.setText("Tabel Penyewaan Aktif");
 
         jPanel1.setMaximumSize(new java.awt.Dimension(626, 666));
         jPanel1.setMinimumSize(new java.awt.Dimension(626, 666));
@@ -573,6 +575,14 @@ public class ViewSewaAktif extends javax.swing.JPanel {
             }
         });
 
+        hapusButton.setText("Hapus");
+        hapusButton.setEnabled(false);
+        hapusButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hapusButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -583,14 +593,16 @@ public class ViewSewaAktif extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tutupPenyewaanButton)
-                        .addGap(36, 36, 36))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(hapusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -601,7 +613,8 @@ public class ViewSewaAktif extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tutupPenyewaanButton))
+                    .addComponent(tutupPenyewaanButton)
+                    .addComponent(hapusButton))
                 .addGap(29, 29, 29)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -802,6 +815,7 @@ public class ViewSewaAktif extends javax.swing.JPanel {
             showDataDetailOfPelanggan(row);
             showDataDetailOfMobil(row);
             tutupPenyewaanButton.setEnabled(true);
+            hapusButton.setEnabled(true);
         }
     }//GEN-LAST:event_viewTableMouseClicked
 
@@ -844,6 +858,33 @@ public class ViewSewaAktif extends javax.swing.JPanel {
         SwingUtilities.updateComponentTreeUI(frame.getContentPane());
     }//GEN-LAST:event_tutupPenyewaanButtonActionPerformed
 
+    private void hapusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusButtonActionPerformed
+        int row = viewTable.getSelectedRow();
+        int idSewa = Integer.valueOf(penyewaanModel.getValueAt(row, 0).toString());
+        
+        int response = JOptionPane.showConfirmDialog(frame,
+                "Apakah anda ingin menghapus penyewaan (id sewa: " + idSewa + ") ini?",
+                "Penghapusan Data",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+        
+        if (response == JOptionPane.YES_OPTION) {
+            Delete.delete(idSewa, frame); // lakukan penghapusan
+            
+            // update table and pagination
+            int newOffset = pagination.updatePagination();
+            pagination.GUIComponent.reinitComboBox();
+            pagination.GUIComponent.update();
+            
+            penyewaanModel.sql.select.offset(newOffset);
+            ResultSet rs = penyewaanModel.sql.select.execute();
+            penyewaanModel.save(rs);
+            penyewaanModel.sql.getConnection().close(rs);
+            updateTable();
+        }
+    }//GEN-LAST:event_hapusButtonActionPerformed
+
     public String quotate(String content) {
         return "'" + content + "'";
     }
@@ -863,6 +904,7 @@ public class ViewSewaAktif extends javax.swing.JPanel {
     private javax.swing.JTextField field_telepon;
     private javax.swing.JTextField field_tgl_lahir;
     private javax.swing.JButton firstPaginationButton;
+    private javax.swing.JButton hapusButton;
     private javax.swing.JTextField hargaSewa12JamField;
     private javax.swing.JTextField hargaSewa24JamField;
     private javax.swing.JLabel jLabel1;

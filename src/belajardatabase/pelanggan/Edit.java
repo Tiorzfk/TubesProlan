@@ -7,27 +7,42 @@
 package belajardatabase.pelanggan;
 
 import belajardatabase.model.KotaTableModel;
+import belajardatabase.model.MobilTableModel;
 import belajardatabase.model.PelangganTableModel;
+import static belajardatabase.utilities.DateUtility.getDayFromDateString;
+import static belajardatabase.utilities.DateUtility.getMonthFromDateString;
+import static belajardatabase.utilities.DateUtility.getYearFromDateString;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
  * @author ASEP
  */
-public class Entry extends javax.swing.JPanel {
+public class Edit extends javax.swing.JPanel {
     PelangganTableModel model       = null;
     KotaTableModel      kotaModel   = null;
+    
     javax.swing.JFrame  frame       = null;
+    private String      noKTP = "";
     
     /**
      * Creates new form entry
      */
-    public Entry(javax.swing.JFrame frame) {
+    public Edit(javax.swing.JFrame frame, String noKTP) {
         this.frame = frame;
+        this.noKTP = noKTP;
         
         initComponents();
-        initModel();
+        
+        try {
+            initModel();
+        } catch (Exception e) {
+            System.out.println("Error inside `initModel` : " + e.getMessage());
+        }
+        
+        initForm();
         
         // init kota combobox
         ResultSet rs = kotaModel.sql.select.execute();
@@ -46,9 +61,61 @@ public class Entry extends javax.swing.JPanel {
         });
     }
     
-    public void initModel() {
+    public void initModel() throws Exception {
         model = new PelangganTableModel();
         kotaModel = new KotaTableModel();
+        
+        model.sql.select.where("noKTP", "=", noKTP);
+        ResultSet rs = model.sql.select.execute();
+        model.save(rs);
+        model.sql.getConnection().close(rs);
+        
+        if (model.getRowCount() != 1) {
+            throw new Exception("Pelanggan tidak ditemukan");
+        }
+    }
+    
+    public void initForm() {
+        String noKTP = model.getValueAt(0, 0).toString();
+        String nama = model.getValueAt(0, 1).toString();
+        String tanggalLahir = model.getValueAt(0, 2).toString();
+        String pekerjaan = model.getValueAt(0, 3).toString();
+        String alamat = model.getValueAt(0, 4).toString();
+        String jenisKelamin = model.getValueAt(0, 5).toString();
+        String idKota = model.getValueAt(0, 6).toString();
+        String telepon = model.getValueAt(0, 7).toString();
+        String handphone = model.getValueAt(0, 8).toString();
+        String email = model.getValueAt(0, 9).toString();
+        
+        String tglLahirHari = getDayFromDateString(tanggalLahir, "dd-MM-yyyy");
+        String tglLahirBulan = getMonthFromDateString(tanggalLahir, "dd-MM-yyyy");
+        String tglLahirTahun = getYearFromDateString(tanggalLahir, "dd-MM-yyyy");
+        
+        int jenkel = Integer.valueOf(jenisKelamin);
+        KotaTableModel kotaModel = new KotaTableModel();
+        String namaKota = kotaModel.getNamaKotaById(
+                Integer.valueOf(idKota)
+        );
+        
+        noKTPField.setText(noKTP);
+        namaField.setText(nama);
+        
+        priaRadioButton.setSelected(false);
+        wanitaRadioButton.setSelected(true);
+        if (jenkel == PelangganTableModel.PRIA) {
+            priaRadioButton.setSelected(true);
+            wanitaRadioButton.setSelected(false);
+        }
+        
+        tahunField.setText(tglLahirTahun);
+        bulanField.setText(tglLahirBulan);
+        hariField.setText(tglLahirHari);
+        pekerjaanField.setText(pekerjaan);
+        alamatField.setText(alamat);
+        kotaComboBox.setSelectedItem(namaKota);
+        teleponField.setText(telepon);
+        noHPField.setText(handphone);
+        emailField.setText(email);
     }
 
     /**
@@ -89,7 +156,6 @@ public class Entry extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         simpanButton = new javax.swing.JButton();
-        resetButton = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(626, 666));
         setMinimumSize(new java.awt.Dimension(626, 666));
@@ -103,6 +169,7 @@ public class Entry extends javax.swing.JPanel {
         jLabel1.setText("No. KTP");
         jPanel2.add(jLabel1);
 
+        noKTPField.setEditable(false);
         noKTPField.setName("no_ktp"); // NOI18N
         jPanel2.add(noKTPField);
 
@@ -208,21 +275,13 @@ public class Entry extends javax.swing.JPanel {
 
         jPanel5.setLayout(new java.awt.GridLayout(1, 2, 10, 0));
 
-        simpanButton.setText("SIMPAN");
+        simpanButton.setText("UBAH");
         simpanButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 simpanButtonActionPerformed(evt);
             }
         });
         jPanel5.add(simpanButton);
-
-        resetButton.setText("RESET");
-        resetButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetButtonActionPerformed(evt);
-            }
-        });
-        jPanel5.add(resetButton);
 
         jPanel2.add(jPanel5);
 
@@ -249,6 +308,7 @@ public class Entry extends javax.swing.JPanel {
     }//GEN-LAST:event_kotaComboBoxActionPerformed
 
     private void simpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanButtonActionPerformed
+
         int jenkel = PelangganTableModel.PEREMPUAN;
         if (priaRadioButton.isSelected()) jenkel = PelangganTableModel.PRIA;
         
@@ -259,27 +319,25 @@ public class Entry extends javax.swing.JPanel {
         int idKota = kotaModel.getIdKotaByNamaKota(namaKota);
         
         
-        model.sql.insert.reset();
-        model.sql.insert.value("noKTP", noKTPField.getText());
-        model.sql.insert.value("nama", namaField.getText());
-        model.sql.insert.value("jenisKelamin", jenkel);
-        model.sql.insert.value("tanggalLahir", tanggalLahir);
-        model.sql.insert.value("pekerjaan", pekerjaanField.getText());
-        model.sql.insert.value("alamat", alamatField.getText());
-        model.sql.insert.value("idKota", idKota);
-        model.sql.insert.value("telepon", teleponField.getText());
-        model.sql.insert.value("handphone", noHPField.getText());
-        model.sql.insert.value("email", emailField.getText());
+        model.sql.update.reset();
+        model.sql.update.where("noKTP", noKTP);
+        model.sql.update.set("nama", namaField.getText());
+        model.sql.update.set("jenisKelamin", jenkel);
+        model.sql.update.set("tanggalLahir", tanggalLahir);
+        model.sql.update.set("pekerjaan", pekerjaanField.getText());
+        model.sql.update.set("alamat", alamatField.getText());
+        model.sql.update.set("idKota", idKota);
+        model.sql.update.set("telepon", teleponField.getText());
+        model.sql.update.set("handphone", noHPField.getText());
+        model.sql.update.set("email", emailField.getText());
 
-        boolean success = model.sql.insert.execute();
+        boolean success = model.sql.update.execute();
         
-        String pesan = "Gagal menambah data";
-        if (success) pesan = "Sukses menambah data";
-        
+        String pesan = "Gagal mengubah data";
+        if (success) pesan = "Sukses mengubah data";
         JOptionPane.showMessageDialog(frame, pesan);
         
-        if (success) reset();
-        
+        if (success) redirectToView();
     }//GEN-LAST:event_simpanButtonActionPerformed
 
     private void priaRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priaRadioButtonActionPerformed
@@ -290,25 +348,13 @@ public class Entry extends javax.swing.JPanel {
         priaRadioButton.setSelected(false);
     }//GEN-LAST:event_wanitaRadioButtonActionPerformed
 
-    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
-        reset();
-    }//GEN-LAST:event_resetButtonActionPerformed
+    public void redirectToView() {
+        javax.swing.JPanel en = new belajardatabase.pelanggan.View(frame);
 
-    public void reset() {
-        noKTPField.setText("");
-        namaField.setText("");
-        priaRadioButton.setSelected(true);
-        wanitaRadioButton.setSelected(false);
-        tahunField.setText("");
-        bulanField.setText("");
-        hariField.setText("");
-        pekerjaanField.setText("");
-        alamatField.setText("");
-        kotaComboBox.setSelectedIndex(0);
-        teleponField.setText("");
-        noHPField.setText("");
-        emailField.setText("");
+        frame.setContentPane(en);
+        SwingUtilities.updateComponentTreeUI(frame.getContentPane());
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField alamatField;
@@ -336,10 +382,10 @@ public class Entry extends javax.swing.JPanel {
     private javax.swing.JTextField noKTPField;
     private javax.swing.JTextField pekerjaanField;
     private javax.swing.JRadioButton priaRadioButton;
-    private javax.swing.JButton resetButton;
     private javax.swing.JButton simpanButton;
     private javax.swing.JTextField tahunField;
     private javax.swing.JTextField teleponField;
     private javax.swing.JRadioButton wanitaRadioButton;
     // End of variables declaration//GEN-END:variables
+
 }

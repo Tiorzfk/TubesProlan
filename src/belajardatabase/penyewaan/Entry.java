@@ -11,6 +11,7 @@ import belajardatabase.model.MobilTableModel;
 import belajardatabase.model.PelangganTableModel;
 import belajardatabase.model.PenyewaanTableModel;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,10 +26,14 @@ public class Entry extends javax.swing.JPanel {
     PelangganTableModel pelangganModel = null;
     PenyewaanTableModel penyewaanModel = null;
     
+    javax.swing.JFrame frame = null;
+    
     /**
      * Creates new form entry
      */
     public Entry(javax.swing.JFrame frame) {
+        this.frame = frame;
+        
         initComponents();
         initModel();
         
@@ -348,6 +353,7 @@ public class Entry extends javax.swing.JPanel {
 
         dataDetailPanel2.add(jPanel32);
 
+        pencarianMobilField.setText("No. Polisi atau Merk");
         pencarianMobilField.setToolTipText("Kotak Pencarian");
         pencarianMobilField.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.lightGray), javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5), javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 16, new javax.swing.ImageIcon("C:\\Users\\ASEP\\Downloads\\1498141047_icon-111-search.png"))))); // NOI18N
         pencarianMobilField.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -359,6 +365,7 @@ public class Entry extends javax.swing.JPanel {
 
         jLabel1.setText("Cari Mobil");
 
+        pencarianPelangganField.setText("No KTP atau Nama");
         pencarianPelangganField.setToolTipText("Kotak Pencarian");
         pencarianPelangganField.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.lightGray), javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5), javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 16, new javax.swing.ImageIcon("C:\\Users\\ASEP\\Downloads\\1498141047_icon-111-search.png"))))); // NOI18N
         pencarianPelangganField.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -516,6 +523,14 @@ public class Entry extends javax.swing.JPanel {
             hargaSewa12JamField.setText(hargaSewa12Jam);
             hargaSewa24JamField.setText(hargaSewa24Jam);
             dendaPerJamField.setText(dendaPerJam);
+        } else {
+            if (mobilModel.getRowCount() > 1) {
+                JOptionPane.showMessageDialog(
+                        frame,
+                        "Kata kunci Anda kurang spesifik\n"
+                        + "Ia cocok terhadap satu lebih data"
+                );
+            }
         }
     }//GEN-LAST:event_pencarianMobilFieldActionPerformed
 
@@ -585,12 +600,13 @@ public class Entry extends javax.swing.JPanel {
 
         pelangganModel.sql.select.whereSegmentStart(sign);
         pelangganModel.sql.select.where("noKTP", "LIKE", "%" + searchText + "%");
+        pelangganModel.sql.select.orWhere("nama", "LIKE", "%" + searchText + "%");
         pelangganModel.sql.select.whereSegmentEnd(sign);
 
         ResultSet rs = pelangganModel.sql.select.execute();
         pelangganModel.save(rs);
         pelangganModel.sql.getConnection().close(rs);
-
+        
         if (pelangganModel.getRowCount() == 1) {
             String noKTP = pelangganModel.getValueAt(0, 0).toString();
             String nama = pelangganModel.getValueAt(0, 1).toString();
@@ -602,6 +618,8 @@ public class Entry extends javax.swing.JPanel {
             String telepon = pelangganModel.getValueAt(0, 7).toString();
             String handphone = pelangganModel.getValueAt(0, 8).toString();
             String email = pelangganModel.getValueAt(0, 9).toString();
+            
+            if (isCanRentACar(noKTP) == false) return;
 
             int jenkel = Integer.valueOf(jenisKelamin);
             KotaTableModel kotaModel = new KotaTableModel();
@@ -623,9 +641,43 @@ public class Entry extends javax.swing.JPanel {
             teleponField.setText(telepon);
             noHPField.setText(handphone);
             emailField.setText(email);
+        } else {
+            if (pelangganModel.getRowCount() > 1) {
+                JOptionPane.showMessageDialog(
+                        frame,
+                        "Kata kunci Anda kurang spesifik\n"
+                        + "Ia cocok terhadap satu lebih data"
+                );
+            }
         }
     }//GEN-LAST:event_pencarianPelangganFieldActionPerformed
 
+    // pelanggan yang bisa menyewa adalah yang sedang tidak menyewa sebuah
+    // kendaraan. Dengan kata lain, penyewa tersebut tidak boleh menyewa 2 kali
+    public boolean isCanRentACar(String noKTP) {
+        penyewaanModel.sql.select.reset();
+        penyewaanModel.sql.select.where("noKTP", "=", noKTP);
+        penyewaanModel.sql.select.andWhere("tanggalKembali", "=", "0000-00-00");
+        ResultSet rs = penyewaanModel.sql.select.execute();
+        try {
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(
+                        frame,
+                        "Pelanggan saat ini sedang menyewa",
+                        "Peringatan",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                return false;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error : " + e.getMessage());
+            return false;
+        }
+        penyewaanModel.sql.getConnection().close(rs);
+        
+        return true;
+    }
+    
     public void reset() {
         pencarianMobilField.setText("");
         pencarianPelangganField.setText("");

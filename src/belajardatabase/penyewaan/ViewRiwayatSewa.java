@@ -201,7 +201,7 @@ public class ViewRiwayatSewa extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(626, 666));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setText("Tabel Penyewaan");
+        jLabel1.setText("Tabel Riwayat Penyewaan");
 
         jPanel1.setMaximumSize(new java.awt.Dimension(626, 666));
         jPanel1.setMinimumSize(new java.awt.Dimension(626, 666));
@@ -549,7 +549,7 @@ public class ViewRiwayatSewa extends javax.swing.JPanel {
         );
 
         pencarianField.setToolTipText("Kotak Pencarian");
-        pencarianField.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.lightGray), javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5), javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 16, new java.awt.Color(0, 0, 0)))));
+        pencarianField.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.lightGray), javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5), javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 16, new javax.swing.ImageIcon("C:\\Users\\ASEP\\Downloads\\1498141047_icon-111-search.png"))))); // NOI18N
         pencarianField.setMargin(new java.awt.Insets(0, 0, 0, 0));
         pencarianField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
