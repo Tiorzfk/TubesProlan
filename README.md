@@ -32,5 +32,14 @@ Dalam kondisi ini, project belum terkoneksi ke database.
 - Arahkan ke folder hasil ekstrak
 - Pilih file `mysql-connector-java-5.1.42-bin.jar`
 
+### Tata Cara Import Database ke phpMyAdmin
+- Pastikan apache aktif di XAMPP
+- Buka localhost/phpmyadmin
+- Klik menu import
+- klik tombol Browse File atau Pilih File
+- Arahkan ke file database.sql di folder hasil ekstrak
+- Klik tombol Send/Kirim
+
 ### Tata Cara Running Project
+- Pastikan MySQL aktif di XAMPP
 - Klik menu Run -> `Run Project` (bukan Run File)
