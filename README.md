@@ -1,0 +1,45 @@
+### PENTING:
+Kalian test programnya jalan apa engga
+Test untuk setiap kemungkinan, contoh aja:
+- lakukan tambah sewa
+- lakukan tambah sewa dengan penyewa yang sudah memiliki penyewaan aktif
+- kalian lakukan `tutup sewa` dengan tanggal melebihi ketentuan
+- ... dll
+- tambah data mobil
+- lihat data mobil
+- cari mobil
+- cari mobil dengan harga sewa 24 jam >= 300.000
+- ... dll
+
+Intinya kalian cari bug/error sebisa mungkin, terus laporin ke LINE
+
+
+### Tata Cara Download Project Ini
+- Klik tombol hijau "Clone or download"
+- Download ZIP
+
+### Tata Cara Buka Project Ini
+- Extract ZIP
+- Buka Netbeans
+- Menu Open Project, arahkan ke lokasi hasil ekstrak
+
+Dalam kondisi ini, project belum terkoneksi ke database.
+
+### Tata Cara Mengaktifkan Koneksi Database
+- Klik kanan -> properties
+- Menu kiri, pilih Libraries
+- Klik tombol Add JAR
+- Arahkan ke folder hasil ekstrak
+- Pilih file `mysql-connector-java-5.1.42-bin.jar`
+
+### Tata Cara Import Database ke phpMyAdmin
+- Pastikan apache aktif di XAMPP
+- Buka localhost/phpmyadmin
+- Klik menu import
+- klik tombol Browse File atau Pilih File
+- Arahkan ke file database.sql di folder hasil ekstrak
+- Klik tombol Send/Kirim
+
+### Tata Cara Running Project
+- Pastikan MySQL aktif di XAMPP
+- Klik menu Run -> `Run Project` (bukan Run File)

@@ -73,7 +73,7 @@ public class InsertSQL {
     /**
      * Execute UPDATE statement
      */
-    public void execute() {
+    public boolean execute() {
         try {
             String query = "INSERT INTO " + table + " " + getColumns()
                     + " VALUES " + getValues();
@@ -82,7 +82,10 @@ public class InsertSQL {
         } catch (SQLException e) { 
             System.out.println("Error inside `execute` : "
                 + e.getMessage());
+            return false;
         }
+        
+        return true;
     }
     
     private MyDBConnection mdbc;

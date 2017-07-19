@@ -11,25 +11,38 @@ import belajardatabase.utilities.Pagination;
 import belajardatabase.utilities.PaginationGUIComponent;
 import java.awt.event.ItemEvent;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumn;
 
 /**
  *
  * @author ASEP
  */
-public class view extends javax.swing.JFrame {
+public class View extends javax.swing.JPanel {
     MobilTableModel model = null;
     Pagination      pagination = null;
 
+    private javax.swing.JFrame frame = null;
+    
     /**
      * Creates new form view
      */
-    public view() {
+    public View(javax.swing.JFrame frame) {
+        this.frame = frame;
+        
         initComponents();
         initModel();
         initPagination();
         initTable();
-        System.out.println("size = " + this.getContentPane().getSize());
+        
+        // listen when mainWindow is closed
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                model.sql.closeDBConnection();
+            }
+        });
     }
     
     public void initModel() {
@@ -48,6 +61,7 @@ public class view extends javax.swing.JFrame {
         
         ResultSet rs = model.sql.select.execute();
         model.save(rs);
+        model.sql.getConnection().close(rs);
     }
     
     
@@ -82,7 +96,6 @@ public class view extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        paginationComboBoxStatus = new javax.swing.JLabel();
         opsiPanel = new javax.swing.JPanel();
         tableOptionPane = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -101,8 +114,6 @@ public class view extends javax.swing.JFrame {
         TerapkanButton = new javax.swing.JButton();
         pencarianField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        tambahButton = new javax.swing.JButton();
-        sewakanButton = new javax.swing.JButton();
         viewScrollPane = new javax.swing.JScrollPane();
         viewTable = new javax.swing.JTable();
         lastPaginationButton = new javax.swing.JButton();
@@ -139,14 +150,11 @@ public class view extends javax.swing.JFrame {
         jPanel13 = new javax.swing.JPanel();
         ubahButton = new javax.swing.JButton();
         hapusButton = new javax.swing.JButton();
-        jMenuBar2 = new javax.swing.JMenuBar();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
 
-        paginationComboBoxStatus.setToolTipText("");
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setSize(new java.awt.Dimension(626, 666));
+        setMaximumSize(new java.awt.Dimension(626, 666));
+        setMinimumSize(new java.awt.Dimension(626, 666));
+        setName(""); // NOI18N
+        setPreferredSize(new java.awt.Dimension(626, 666));
 
         opsiPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Opsi"));
 
@@ -160,6 +168,7 @@ public class view extends javax.swing.JFrame {
         option_sewa12JamComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { ">=", "<=", ">", "<" }));
         jPanel5.add(option_sewa12JamComboBox);
 
+        option_sewa12JamField.setEditable(false);
         option_sewa12JamField.setText("0");
         jPanel5.add(option_sewa12JamField);
 
@@ -233,7 +242,7 @@ public class view extends javax.swing.JFrame {
         );
 
         pencarianField.setToolTipText("Kotak Pencarian");
-        pencarianField.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.lightGray), javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5), javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 16, new java.awt.Color(0, 0, 0)))));
+        pencarianField.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.lightGray), javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5), javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 16, new javax.swing.ImageIcon("C:\\Users\\ASEP\\Downloads\\1498141047_icon-111-search.png"))))); // NOI18N
         pencarianField.setMargin(new java.awt.Insets(0, 0, 0, 0));
         pencarianField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -243,19 +252,6 @@ public class view extends javax.swing.JFrame {
 
         jLabel2.setText("Pencarian :");
 
-        tambahButton.setText("Tambah");
-
-        sewakanButton.setText("Sewakan");
-        sewakanButton.setEnabled(false);
-
-        viewTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
         viewTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         viewTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -398,24 +394,26 @@ public class view extends javax.swing.JFrame {
 
         ubahButton.setText("Ubah");
         ubahButton.setEnabled(false);
+        ubahButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ubahButtonActionPerformed(evt);
+            }
+        });
         jPanel13.add(ubahButton);
 
         hapusButton.setText("Hapus");
         hapusButton.setEnabled(false);
+        hapusButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hapusButtonActionPerformed(evt);
+            }
+        });
         jPanel13.add(hapusButton);
 
         dataDetailPanel.add(jPanel13);
 
-        jMenu3.setText("File");
-        jMenuBar2.add(jMenu3);
-
-        jMenu4.setText("Edit");
-        jMenuBar2.add(jMenu4);
-
-        setJMenuBar(jMenuBar2);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -424,11 +422,7 @@ public class view extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tambahButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sewakanButton))
+                        .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(firstPaginationButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -444,21 +438,17 @@ public class view extends javax.swing.JFrame {
                     .addComponent(dataDetailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(viewScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
                     .addComponent(opsiPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 608, Short.MAX_VALUE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(opsiPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(tambahButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(sewakanButton, javax.swing.GroupLayout.Alignment.TRAILING)))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(pencarianField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(viewScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -473,137 +463,7 @@ public class view extends javax.swing.JFrame {
                 .addComponent(dataDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-
-        pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void TerapkanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TerapkanButtonActionPerformed
-        // grab the user option value
-        String sewa12JamOperator = option_sewa12JamComboBox
-                .getSelectedItem().toString();
-        String sewa24JamOperator = option_sewa24JamComboBox
-                .getSelectedItem().toString();
-        String sewa12Jam = option_sewa12JamField.getText();
-        String sewa24Jam = option_sewa24JamField.getText();
-        int status = option_statusComboBox.getSelectedItem().toString()
-                .equals("Tersedia") ?
-                    MobilTableModel.STATUS_TERSEDIA :
-                    MobilTableModel.STATUS_TIDAK_TERSEDIA;;
-        
-        // reset
-        String sign = "USER OPTION";
-        model.sql.select.removeWhereBySegmentSign(sign);
-        
-        model.sql.select.whereSegmentStart(sign);
-        model.sql.select.where("hargaSewa12Jam", sewa12JamOperator, sewa12Jam);
-        model.sql.select.andWhere("hargaSewa24Jam", sewa24JamOperator, sewa24Jam);
-        model.sql.select.andWhere("status", "=", status);
-        model.sql.select.whereSegmentEnd(sign);
-        
-        int newOffset = pagination.isSQLChanged.updatePagination();
-        pagination.isSQLChanged.GUIComponent.reinitComboBox();
-        pagination.GUIComponent.update();
-        
-        model.sql.select.offset(newOffset);
-        ResultSet rs = model.sql.select.execute();
-        model.save(rs);
-        
-        updateTable();
-    }//GEN-LAST:event_TerapkanButtonActionPerformed
-
-    private void firstPaginationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstPaginationButtonActionPerformed
-        int newOffset = pagination.jumpToFirst();
-        pagination.GUIComponent.update();
-        
-        model.sql.select.offset(newOffset);
-        ResultSet rs = model.sql.select.execute();
-        model.save(rs);
-        
-        updateTable();
-    }//GEN-LAST:event_firstPaginationButtonActionPerformed
-
-    private void previousPaginationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousPaginationButtonActionPerformed
-       int newOffset = pagination.movePrevious();
-       pagination.GUIComponent.update();
-       
-       model.sql.select.offset(newOffset); 
-       ResultSet rs = model.sql.select.execute();
-       model.save(rs);
-       
-       updateTable();
-    }//GEN-LAST:event_previousPaginationButtonActionPerformed
-
-    private void nextPaginationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextPaginationButtonActionPerformed
-        int newOffset = pagination.moveNext();
-        pagination.GUIComponent.update();
-        
-        model.sql.select.offset(newOffset);
-        ResultSet rs = model.sql.select.execute();
-        model.save(rs);
-        
-        updateTable();
-    }//GEN-LAST:event_nextPaginationButtonActionPerformed
-
-    private void lastPaginationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastPaginationButtonActionPerformed
-        int newOffset = pagination.jumpToLast();
-        pagination.GUIComponent.update();
-        
-        model.sql.select.offset(newOffset);
-        ResultSet rs = model.sql.select.execute();
-        model.save(rs);
-        
-        updateTable();
-    }//GEN-LAST:event_lastPaginationButtonActionPerformed
-
-    private void paginationComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_paginationComboBoxItemStateChanged
-        String _paginationComboBoxStatus = paginationComboBoxStatus.getText();
-        
-        if (evt.getStateChange() == ItemEvent.DESELECTED &&
-            pagination.GUIComponent.getComboBoxStatus() ==
-                PaginationGUIComponent.COMBOBOX_ACCEPT_ANY_ACTION)
-        {
-            System.out.println("Posisi " + "paginationComboBox");
-            
-            int selectedPage = Integer.valueOf(paginationComboBox
-                    .getSelectedItem()
-                    .toString());
-            
-            int newOffset = pagination.jumpTo(selectedPage);
-            pagination.GUIComponent.update();
-            
-            model.sql.select.offset(newOffset);
-            ResultSet rs = model.sql.select.execute();
-            model.save(rs);
-            
-            updateTable();
-            
-            resetDataDetail();
-        }
-    }//GEN-LAST:event_paginationComboBoxItemStateChanged
-
-    private void pencarianFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pencarianFieldActionPerformed
-        String searchText = pencarianField.getText();
-        
-        // reset where clause
-        String sign = "USER SEARCH";
-        model.sql.select.removeWhereBySegmentSign(sign);
-        
-        model.sql.select.whereSegmentStart(sign);
-        model.sql.select.where("noPolisi", "LIKE", "%" + searchText + "%");
-        model.sql.select.orWhere("merk", "LIKE", "%" + searchText + "%");
-        model.sql.select.whereSegmentEnd(sign);
-        
-        int newOffset = pagination.isSQLChanged.updatePagination();
-        pagination.isSQLChanged.GUIComponent.reinitComboBox();
-        pagination.GUIComponent.update();
-        
-        model.sql.select.offset(newOffset);
-        ResultSet rs = model.sql.select.execute();
-        model.save(rs);
-        
-        updateTable();
-    }//GEN-LAST:event_pencarianFieldActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         option_sewa12JamComboBox.setSelectedItem(">=");
@@ -614,9 +474,68 @@ public class view extends javax.swing.JFrame {
         TerapkanButtonActionPerformed(null);
     }//GEN-LAST:event_resetButtonActionPerformed
 
+    private void TerapkanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TerapkanButtonActionPerformed
+        // grab the user option value
+        String sewa12JamOperator = option_sewa12JamComboBox
+        .getSelectedItem().toString();
+        String sewa24JamOperator = option_sewa24JamComboBox
+        .getSelectedItem().toString();
+        String sewa12Jam = option_sewa12JamField.getText();
+        String sewa24Jam = option_sewa24JamField.getText();
+        int status = option_statusComboBox.getSelectedItem().toString()
+        .equals("Tersedia") ?
+        MobilTableModel.STATUS_TERSEDIA :
+        MobilTableModel.STATUS_TIDAK_TERSEDIA;;
+
+        // reset
+        String sign = "USER OPTION";
+        model.sql.select.removeWhereBySegmentSign(sign);
+
+        model.sql.select.whereSegmentStart(sign);
+        model.sql.select.where("hargaSewa12Jam", sewa12JamOperator, sewa12Jam);
+        model.sql.select.andWhere("hargaSewa24Jam", sewa24JamOperator, sewa24Jam);
+        model.sql.select.andWhere("status", "=", status);
+        model.sql.select.whereSegmentEnd(sign);
+
+        int newOffset = pagination.isSQLChanged.updatePagination();
+        pagination.isSQLChanged.GUIComponent.reinitComboBox();
+        pagination.GUIComponent.update();
+
+        model.sql.select.offset(newOffset);
+        ResultSet rs = model.sql.select.execute();
+        model.save(rs);
+        model.sql.getConnection().close(rs);
+
+        updateTable();
+    }//GEN-LAST:event_TerapkanButtonActionPerformed
+
+    private void pencarianFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pencarianFieldActionPerformed
+        String searchText = pencarianField.getText();
+
+        // reset where clause
+        String sign = "USER SEARCH";
+        model.sql.select.removeWhereBySegmentSign(sign);
+
+        model.sql.select.whereSegmentStart(sign);
+        model.sql.select.where("noPolisi", "LIKE", "%" + searchText + "%");
+        model.sql.select.orWhere("merk", "LIKE", "%" + searchText + "%");
+        model.sql.select.whereSegmentEnd(sign);
+
+        int newOffset = pagination.isSQLChanged.updatePagination();
+        pagination.isSQLChanged.GUIComponent.reinitComboBox();
+        pagination.GUIComponent.update();
+
+        model.sql.select.offset(newOffset);
+        ResultSet rs = model.sql.select.execute();
+        model.save(rs);
+        model.sql.getConnection().close(rs);
+
+        updateTable();
+    }//GEN-LAST:event_pencarianFieldActionPerformed
+
     private void viewTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewTableMouseClicked
         int row = viewTable.getSelectedRow();
-        
+
         if (row != -1) {
             String noPolisi = model.getValueAt(row, 0).toString();
             String merk = model.getValueAt(row, 1).toString();
@@ -626,7 +545,7 @@ public class view extends javax.swing.JFrame {
             String hargaSewa24Jam = model.getValueAt(row, 3).toString();
             String dendaPerJam = model.getValueAt(row, 6).toString();
             String status = model.getValueAt(row, 7).toString();
-                
+
             noPolisiField.setText(noPolisi);
             merkField.setText(merk);
             warnaField.setText(warna);
@@ -635,51 +554,126 @@ public class view extends javax.swing.JFrame {
             hargaSewa24JamField.setText(hargaSewa24Jam);
             dendaPerJamField.setText(dendaPerJam);
             statusField.setText(
-                    Integer.valueOf(status) == MobilTableModel.STATUS_TERSEDIA
-                    ? "Tersedia" : "Tidak Tersedia"
+                Integer.valueOf(status) == MobilTableModel.STATUS_TERSEDIA
+                ? "Tersedia" : "Tidak Tersedia"
             );
 
-            sewakanButton.setEnabled(true);
             ubahButton.setEnabled(true);
             hapusButton.setEnabled(true);
         }
     }//GEN-LAST:event_viewTableMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void lastPaginationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastPaginationButtonActionPerformed
+        int newOffset = pagination.jumpToLast();
+        pagination.GUIComponent.update();
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new view().setVisible(true);
-            }
-        });
-    }
-    
+        model.sql.select.offset(newOffset);
+        ResultSet rs = model.sql.select.execute();
+        model.save(rs);
+        model.sql.getConnection().close(rs);
+
+        updateTable();
+    }//GEN-LAST:event_lastPaginationButtonActionPerformed
+
+    private void nextPaginationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextPaginationButtonActionPerformed
+        int newOffset = pagination.moveNext();
+        pagination.GUIComponent.update();
+
+        model.sql.select.offset(newOffset);
+        ResultSet rs = model.sql.select.execute();
+        model.save(rs);
+        model.sql.getConnection().close(rs);
+
+        updateTable();
+    }//GEN-LAST:event_nextPaginationButtonActionPerformed
+
+    private void paginationComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_paginationComboBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.DESELECTED &&
+            pagination.GUIComponent.getComboBoxStatus() ==
+            PaginationGUIComponent.COMBOBOX_ACCEPT_ANY_ACTION)
+        {
+            System.out.println("Posisi " + "paginationComboBox");
+
+            int selectedPage = Integer.valueOf(paginationComboBox
+                .getSelectedItem()
+                .toString());
+
+            int newOffset = pagination.jumpTo(selectedPage);
+            pagination.GUIComponent.update();
+
+            model.sql.select.offset(newOffset);
+            ResultSet rs = model.sql.select.execute();
+            model.save(rs);
+            model.sql.getConnection().close(rs);
+
+            updateTable();
+
+            resetDataDetail();
+        }
+    }//GEN-LAST:event_paginationComboBoxItemStateChanged
+
+    private void previousPaginationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousPaginationButtonActionPerformed
+        int newOffset = pagination.movePrevious();
+        pagination.GUIComponent.update();
+
+        model.sql.select.offset(newOffset);
+        ResultSet rs = model.sql.select.execute();
+        model.save(rs);
+        model.sql.getConnection().close(rs);
+
+        updateTable();
+    }//GEN-LAST:event_previousPaginationButtonActionPerformed
+
+    private void firstPaginationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstPaginationButtonActionPerformed
+        int newOffset = pagination.jumpToFirst();
+        pagination.GUIComponent.update();
+
+        model.sql.select.offset(newOffset);
+        ResultSet rs = model.sql.select.execute();
+        model.save(rs);
+        model.sql.getConnection().close(rs);
+
+        updateTable();
+    }//GEN-LAST:event_firstPaginationButtonActionPerformed
+
+    private void hapusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusButtonActionPerformed
+        int row         = viewTable.getSelectedRow();
+        String merk     = model.getValueAt(row, 1).toString();
+        String noPolisi = model.getValueAt(row, 0).toString();
+        
+        int response = JOptionPane.showConfirmDialog(frame,
+                "Apakah anda ingin menghapus mobil " + merk + " ini?",
+                "Penghapusan Data",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+        
+        if (response == JOptionPane.YES_OPTION) {
+            Delete.delete(noPolisi, frame); // lakukan penghapusan
+            
+            // update table and pagination
+            int newOffset = pagination.updatePagination();
+            pagination.GUIComponent.reinitComboBox();
+            pagination.GUIComponent.update();
+            
+            model.sql.select.offset(newOffset);
+            ResultSet rs = model.sql.select.execute();
+            model.save(rs);
+            model.sql.getConnection().close(rs);
+            updateTable();
+        }
+    }//GEN-LAST:event_hapusButtonActionPerformed
+
+    private void ubahButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ubahButtonActionPerformed
+        int row         = viewTable.getSelectedRow();
+        String noPolisi = model.getValueAt(row, 0).toString();
+        
+        javax.swing.JPanel en = new belajardatabase.mobil.Edit(frame, noPolisi);
+
+        frame.setContentPane(en);
+        SwingUtilities.updateComponentTreeUI(frame.getContentPane());
+    }//GEN-LAST:event_ubahButtonActionPerformed
+
     public void updateTable() {
         model.fireTableDataChanged();
     }
@@ -695,7 +689,6 @@ public class view extends javax.swing.JFrame {
         statusField.setText("Pilih baris data");
         ubahButton.setEnabled(false);
         hapusButton.setEnabled(false);
-        sewakanButton.setEnabled(false); // buruk, tidak sesuai dengan method
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -719,9 +712,6 @@ public class view extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
@@ -745,16 +735,13 @@ public class view extends javax.swing.JFrame {
     private javax.swing.JTextField option_sewa24JamField;
     private javax.swing.JComboBox option_statusComboBox;
     private javax.swing.JComboBox paginationComboBox;
-    private javax.swing.JLabel paginationComboBoxStatus;
     private javax.swing.JTextField pencarianField;
     private javax.swing.JLabel positionPaginationLabel;
     private javax.swing.JButton previousPaginationButton;
     private javax.swing.JButton resetButton;
-    private javax.swing.JButton sewakanButton;
     private javax.swing.JTextField statusField;
     private javax.swing.JPanel tableOptionPane;
     private javax.swing.JTextField tahunField;
-    private javax.swing.JButton tambahButton;
     private javax.swing.JButton ubahButton;
     private javax.swing.JScrollPane viewScrollPane;
     private javax.swing.JTable viewTable;

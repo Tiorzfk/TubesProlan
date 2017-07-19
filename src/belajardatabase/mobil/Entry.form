@@ -64,7 +64,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="No. Polisi"/>
+            <Property name="text" type="java.lang.String" value="No. Polisi (9 karakter maksimal)"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="noPolisiField">
@@ -93,9 +93,14 @@
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
             <Property name="text" type="java.lang.String" value="Harga Sewa 12 Jam"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="hargaSewa12JamField">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="text" type="java.lang.String" value="Tidak Tersedia"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
@@ -106,7 +111,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Denda Per Jam"/>
+            <Property name="text" type="java.lang.String" value="Denda Per Hari"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="dendaPerJamField">

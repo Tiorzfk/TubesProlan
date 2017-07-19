@@ -7,11 +7,13 @@
 package belajardatabase.model;
 
 import static belajardatabase.model.MobilTableModel.table;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Date;
 
 /**
  *
@@ -126,9 +128,9 @@ public class PelangganTableModel extends MyAbstractModel {
         try {
             String dateString = d.toString();
 
-            SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             Date date = (Date) inputFormat.parse(dateString);
-            SimpleDateFormat outputFormat = new SimpleDateFormat("EEEE, dd.MM.yyyy", Locale.US);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
             result = outputFormat.format(date);
         } catch (ParseException e) {
             System.out.println("Error inside `parseDate`: "

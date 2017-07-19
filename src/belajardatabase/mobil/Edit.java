@@ -8,87 +8,80 @@ package belajardatabase.mobil;
 
 import belajardatabase.model.MobilTableModel;
 import belajardatabase.mysqlop.InsertSQL;
-import belajardatabase.utilities.ActionValidator;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
  * @author ASEP
  */
-public class entry extends javax.swing.JPanel {
-    MobilTableModel model       = null;
-    //InputValidator  validator   = null;
+public class Edit extends javax.swing.JPanel {
+    MobilTableModel     model   = null;
+    
+    javax.swing.JFrame  frame       = null;
+    private String         noPolisi = "";
 
     /**
      * Creates new form entry
      */
-    public entry() {
+    public Edit(javax.swing.JFrame frame, String noPolisi) {
+        this.frame = frame;
+        this.noPolisi = noPolisi;
+        
         initComponents();
-        initModel();
-        //initValidator();
-    }
-    
-    public void initModel() {
-        model = new MobilTableModel();
-    }
-    
-    public void initValidator() {   
-        /* validator = new InputValidator();
         
         try {
-            validator.field(noPolisiField, "No Polisi");
-            validator.addRule("required", true);
-     
-            validator.end();
-            
-            validator.field(merkField, "merk");
-            validator.addRule("required", true);
-            validator.addRule("valid_input", "alphanumeric_only");
-            validator.end();
-
-            validator.field(warnaField, "Warna");
-            validator.addRule("required", true);
-            validator.addRule("valid_input", "character_only");
-            validator.end();
-
-            validator.field(tahunField, "Tahun");
-            validator.addRule("required", true);
-            validator.addRule("valid_input", "numeric_only");
-            validator.end();
-
-            validator.field(tahunField, "Tahun");
-            validator.addRule("required", true);
-            validator.addRule("valid_input", "numeric_only");
-            validator.end();
-
-            validator.field(hargaSewa12JamField, "Harga Sewa 12 Jam");
-            validator.addRule("required", true);
-            validator.addRule("valid_input", "numeric_only");
-            validator.end();
-
-            validator.field(hargaSewa24JamField, "Harga Sewa 24 Jam");
-            validator.addRule("required", true);
-            validator.addRule("valid_input", "numeric_only");
-            validator.end();
-
-            validator.field(dendaPerJamField, "Denda Per Jam");
-            validator.addRule("required", true);
-            validator.addRule("valid_input", "numeric_only");
-            validator.end();
-
-            validator.field(statusComboBox, "Status");
-            validator.addRule("required", true);
-            validator.addRule("valid_input", new String[] {
-                "Tersedia",
-                "Tidak Tersedia"
-            });
-            validator.end();
-            
+            initModel();
         } catch (Exception e) {
-            System.out.println("Error insisde `initValidator`: " + e.getMessage());
+            System.out.println("Error inside `initModel` : " + e.getMessage());
         }
-        */
+        
+        initForm();
+        
+        // listen when mainWindow is closed
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                model.sql.closeDBConnection();
+            }
+        });
+    }
+    
+    public void initModel() throws Exception {
+        model = new MobilTableModel();
+        
+        model.sql.select.where("noPolisi", "=", noPolisi);
+        ResultSet rs = model.sql.select.execute();
+        model.save(rs);
+        model.sql.getConnection().close(rs);
+        
+        if (model.getRowCount() != 1) {
+            throw new Exception("No. Polisi tidak ditemukan");
+        }
+    }
+    
+    public void initForm() {
+        String noPolisi = model.getValueAt(0, 0).toString();
+        String merk = model.getValueAt(0, 1).toString();
+        String warna = model.getValueAt(0, 4).toString();
+        String tahun = model.getValueAt(0, 5).toString();
+        String hargaSewa12Jam = model.getValueAt(0, 2).toString();
+        String hargaSewa24Jam = model.getValueAt(0, 3).toString();
+        String dendaPerJam = model.getValueAt(0, 6).toString();
+        int status = Integer.valueOf(model.getValueAt(0, 7).toString());
+        
+        noPolisiField.setText(noPolisi);
+        merkField.setText(merk);
+        warnaField.setText(warna);
+        tahunField.setText(tahun);
+        hargaSewa24JamField.setText(hargaSewa24Jam);
+        dendaPerJamField.setText(dendaPerJam);
+        statusComboBox.setSelectedItem(
+                status == MobilTableModel.STATUS_TERSEDIA ?
+                "Tersedia" : "Tidak Tersedia"
+        );
     }
 
     /**
@@ -129,8 +122,10 @@ public class entry extends javax.swing.JPanel {
 
         fieldPanel.setLayout(new java.awt.GridLayout(9, 2, 10, 5));
 
-        jLabel1.setText("No. Polisi");
+        jLabel1.setText("No. Polisi (9 karakter maksimal)");
         fieldPanel.add(jLabel1);
+
+        noPolisiField.setEditable(false);
         fieldPanel.add(noPolisiField);
 
         jLabel2.setText("Merk");
@@ -146,7 +141,11 @@ public class entry extends javax.swing.JPanel {
         fieldPanel.add(tahunField);
 
         jLabel5.setText("Harga Sewa 12 Jam");
+        jLabel5.setToolTipText("");
         fieldPanel.add(jLabel5);
+
+        hargaSewa12JamField.setEditable(false);
+        hargaSewa12JamField.setText("Tidak Tersedia");
         fieldPanel.add(hargaSewa12JamField);
 
         jLabel6.setText("Harga Sewa 24 Jam");
@@ -166,7 +165,7 @@ public class entry extends javax.swing.JPanel {
         jLabel9.setText("just a gap holder");
         fieldPanel.add(jLabel9);
 
-        simpanButton.setText("SIMPAN");
+        simpanButton.setText("UBAH");
         simpanButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 simpanButtonActionPerformed(evt);
@@ -175,7 +174,7 @@ public class entry extends javax.swing.JPanel {
         fieldPanel.add(simpanButton);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel10.setText("Tambah Mobil");
+        jLabel10.setText("Ubah Data Mobil");
 
         messageTextPane.setEditable(false);
         jScrollPane2.setViewportView(messageTextPane);
@@ -190,7 +189,7 @@ public class entry extends javax.swing.JPanel {
                     .addComponent(jLabel10)
                     .addComponent(fieldPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
-                .addContainerGap(249, Short.MAX_VALUE))
+                .addContainerGap(255, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,29 +205,43 @@ public class entry extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void simpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanButtonActionPerformed
-        /*
-        if (validator.verifyAll() == false) {
-            messageTextPane.setText(validator.getMessage());
-            return;
-        }
-        */
         
-        model.sql.insert.reset();
-        model.sql.insert.value("noPolisi", noPolisiField.getText());
-        model.sql.insert.value("merk", merkField.getText());
-        model.sql.insert.value("warna", warnaField.getText());
-        model.sql.insert.value("tahun", tahunField.getText());
-        model.sql.insert.value("hargaSewa12Jam", hargaSewa12JamField.getText());
-        model.sql.insert.value("hargaSewa24Jam", hargaSewa24JamField.getText());
-        model.sql.insert.value("dendaPerJam", dendaPerJamField.getText());
-        model.sql.insert.value("status", statusComboBox
+        model.sql.update.where("noPolisi", noPolisi);
+        model.sql.update.set("merk", merkField.getText());
+        model.sql.update.set("warna", warnaField.getText());
+        model.sql.update.set(
+                "tahun",
+                Integer.valueOf(tahunField.getText())
+        );
+        model.sql.update.set(
+                "hargaSewa24Jam",
+                Integer.valueOf(hargaSewa24JamField.getText())
+        );
+        model.sql.update.set(
+                "dendaPerJam",
+                Integer.valueOf(dendaPerJamField.getText())
+        );
+        model.sql.update.set("status", statusComboBox
                 .getSelectedItem().toString() == "Tersedia" ?
                 MobilTableModel.STATUS_TERSEDIA :
                 MobilTableModel.STATUS_TIDAK_TERSEDIA
         );
-        model.sql.insert.execute();
+        
+        boolean success = model.sql.update.execute();
+        
+        String pesan = "Gagal mengubah data";
+        if (success) pesan = "Sukses mengubah data";
+        JOptionPane.showMessageDialog(frame, pesan);
+        
+        if (success) redirectToView();
     }//GEN-LAST:event_simpanButtonActionPerformed
 
+    public void redirectToView() {
+        javax.swing.JPanel en = new belajardatabase.mobil.View(frame);
+
+        frame.setContentPane(en);
+        SwingUtilities.updateComponentTreeUI(frame.getContentPane());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField dendaPerJamField;

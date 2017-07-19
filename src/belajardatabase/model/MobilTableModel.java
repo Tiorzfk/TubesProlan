@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class MobilTableModel extends MyAbstractModel {
     public static final String      table        = "mobil";
-    public static final int         dataPerPage  = 2;
+    public static final int         dataPerPage  = 5;
     
     private final int  colnum = 8;
     private int rownum;
@@ -43,7 +43,7 @@ public class MobilTableModel extends MyAbstractModel {
                 String[] row = {
                     rs.getString("noPolisi"),
                     rs.getString("merk"),
-                    rs.getString("hargaSewa12Jam"),
+                    "Tidak Tersedia",
                     rs.getString("hargaSewa24Jam"),
                     rs.getString("warna"),
                     rs.getString("tahun").substring(0, 4),

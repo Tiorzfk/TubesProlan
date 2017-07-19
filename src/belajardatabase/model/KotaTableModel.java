@@ -74,9 +74,11 @@ public class KotaTableModel extends MyAbstractModel {
         String namaKota = "";
         
         try {
+            sql.select.reset();
             sql.select.where("idKota", "=", idKota);
         
             rs = sql.select.execute();
+            rs.next();
             namaKota = rs.getString("namaKota");
         } catch (SQLException e) {
             System.out.println("Error inside `getNamaKotaById` method: "
@@ -89,14 +91,16 @@ public class KotaTableModel extends MyAbstractModel {
         return namaKota;
     }
     
-    public int getIdKotaByNamaKota(String namaKota) {
+    public int getIdKotaByNamaKota(String namaKota) { 
         ResultSet rs = null;
         int idKota = -1;
         
         try {
+            sql.select.reset();
             sql.select.where("namaKota", "=", namaKota);
         
             rs = sql.select.execute();
+            rs.next();
             idKota = rs.getInt("idKota");
         } catch (SQLException e) {
             System.out.println("Error inside `getIdKotaByNamaKota` method: "

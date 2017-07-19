@@ -7,8 +7,13 @@
 package belajardatabase.model;
 
 import static belajardatabase.model.PenyewaanTableModel.table;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  *
@@ -18,15 +23,17 @@ public class PenyewaanTableModel extends MyAbstractModel {
     public static final String      table        = "sewa";
     public static final int         dataPerPage  = 5;
     
-    private int colnum = 6;
+    private int colnum = 8;
     private int rownum;
     private String[] colname = {
         "idSewa",
         "noPolisi",
         "noKTP",
         "tanggalSewa",
+        "batasKembali",
         "tanggalKembali",
-        "totalBayar"
+        "subTotal",
+        "denda"
     };
     private ArrayList<String[]> Result_Sets;
 
@@ -38,17 +45,31 @@ public class PenyewaanTableModel extends MyAbstractModel {
         Result_Sets = new ArrayList<String[]>();
         
         try {
-            
+            String tanggalSewa = "";
+            String tanggalBatasKembali = "";
+            String tanggalKembali = "";
             while (rs.next()) {
+                tanggalSewa = parseDate(rs.getDate("tanggalSewa"));
+                tanggalBatasKembali = parseDate(rs.getDate("batasKembali"));
+                if (rs.getDate("tanggalKembali") != null) {
+                    tanggalKembali = parseDate(rs.getDate("tanggalKembali"));
+                }
+                
                 String[] row = {
                     rs.getString("idSewa"),
                     rs.getString("noPolisi"),
                     rs.getString("noKTP"),
-                    rs.getString("tanggalSewa"),
-                    rs.getString("tanggalKembali"),
-                    rs.getString("totalBayar")
+                    tanggalSewa,
+                    tanggalBatasKembali,
+                    tanggalKembali,
+                    rs.getString("subTotal"),
+                    rs.getString("denda")
                 };
                 Result_Sets.add(row);
+            
+                tanggalSewa = "";
+                tanggalBatasKembali = "";
+                tanggalKembali = "";
             }
         } catch (Exception e) {
             System.out.println("Error inside `PenyewaanTableModel` method: "
@@ -107,4 +128,29 @@ public class PenyewaanTableModel extends MyAbstractModel {
         
         return num_page;
     }
+    
+    public String parseDate(Date d) throws ParseException {
+        String result = "";
+        
+        try {
+            String dateString = d.toString();
+
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            Date date = (Date) inputFormat.parse(dateString);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+            result = outputFormat.format(date);
+        } catch (ParseException e) {
+            System.out.println("Error inside `parseDate`: "
+                + e.getMessage());
+        }
+        return result;
+    }
+    
+    public boolean isCarAlreadyReturned(int rowIndex) {
+        String[] row = Result_Sets.get(rowIndex);
+        String tanggalKembali = row[4];
+        if (tanggalKembali.equals("")) return false;
+        return true;
+    }
+    
 }

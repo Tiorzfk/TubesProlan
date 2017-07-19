@@ -81,14 +81,17 @@ public class UpdateSQL {
     /**
      * Execute UPDATE statement
      */
-    public void execute() {
+    public boolean execute() {
         try {
             String query = "UPDATE " + table + _set + _where;
             stmt.executeUpdate(query);
         } catch (SQLException e) { 
             System.out.println("Error inside `execute` : "
                 + e.getMessage());
+            return false;
         }
+        
+        return true;
     }
     
     private MyDBConnection mdbc;

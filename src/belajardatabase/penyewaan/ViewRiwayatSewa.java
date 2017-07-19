@@ -27,7 +27,7 @@ import javax.swing.table.TableColumn;
  *
  * @author ASEP
  */
-public class view extends javax.swing.JPanel {
+public class ViewRiwayatSewa extends javax.swing.JPanel {
     PenyewaanTableModel penyewaanModel  = null;
     MobilTableModel     mobilModel      = null;
     PelangganTableModel pelangganModel  = null;
@@ -38,14 +38,14 @@ public class view extends javax.swing.JPanel {
     /**
      * Creates new form view
      */
-    public view(javax.swing.JFrame mainWindow) {
+    public ViewRiwayatSewa(javax.swing.JFrame frame) {
         initComponents();
         initModel();
         initPagination();
         initTable();
         
         // listen when mainWindow is closed
-        mainWindow.addWindowListener(new java.awt.event.WindowAdapter() {
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 penyewaanModel.sql.closeDBConnection();
@@ -61,6 +61,7 @@ public class view extends javax.swing.JPanel {
         /* init penyewaan penyewaanModel */
         penyewaanModel = new PenyewaanTableModel();
         
+        penyewaanModel.sql.select.where("tanggalKembali", "<>", "0000-00-00");
         penyewaanModel.sql.select.limit(penyewaanModel.dataPerPage);
         penyewaanModel.sql.select.offset(0);
         
@@ -90,8 +91,8 @@ public class view extends javax.swing.JPanel {
         viewTable.setModel(penyewaanModel);
         
         // leave only 4 column in table
-        for (int i = 6; i < 6; i++) {
-            TableColumn col = viewTable.getColumnModel().getColumn(6);
+        for (int i = 4; i < penyewaanModel.getColumnCount(); i++) {
+            TableColumn col = viewTable.getColumnModel().getColumn(4);
             viewTable.getColumnModel().removeColumn(col);
         }
         
@@ -200,7 +201,7 @@ public class view extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(626, 666));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setText("Tabel Penyewaan");
+        jLabel1.setText("Tabel Riwayat Penyewaan");
 
         jPanel1.setMaximumSize(new java.awt.Dimension(626, 666));
         jPanel1.setMinimumSize(new java.awt.Dimension(626, 666));
@@ -527,7 +528,7 @@ public class view extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(positionPaginationLabel)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -548,7 +549,7 @@ public class view extends javax.swing.JPanel {
         );
 
         pencarianField.setToolTipText("Kotak Pencarian");
-        pencarianField.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.lightGray), javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5), javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 16, new java.awt.Color(0, 0, 0)))));
+        pencarianField.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.lightGray), javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5), javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 16, new javax.swing.ImageIcon("C:\\Users\\ASEP\\Downloads\\1498141047_icon-111-search.png"))))); // NOI18N
         pencarianField.setMargin(new java.awt.Insets(0, 0, 0, 0));
         pencarianField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -597,6 +598,7 @@ public class view extends javax.swing.JPanel {
         penyewaanModel.sql.select.offset(newOffset);
         ResultSet rs = penyewaanModel.sql.select.execute();
         penyewaanModel.save(rs);
+        penyewaanModel.sql.getConnection().close(rs);
 
         updateTable();
     }//GEN-LAST:event_firstPaginationButtonActionPerformed
@@ -609,6 +611,7 @@ public class view extends javax.swing.JPanel {
         penyewaanModel.sql.select.offset(newOffset);
         ResultSet rs = penyewaanModel.sql.select.execute();
         penyewaanModel.save(rs);
+        penyewaanModel.sql.getConnection().close(rs);
 
         updateTable();
     }//GEN-LAST:event_previousPaginationButtonActionPerformed
@@ -632,6 +635,7 @@ public class view extends javax.swing.JPanel {
             penyewaanModel.sql.select.offset(newOffset);
             ResultSet rs = penyewaanModel.sql.select.execute();
             penyewaanModel.save(rs);
+            penyewaanModel.sql.getConnection().close(rs);
 
             updateTable();
 
@@ -651,6 +655,7 @@ public class view extends javax.swing.JPanel {
         penyewaanModel.sql.select.offset(newOffset);
         ResultSet rs = penyewaanModel.sql.select.execute();
         penyewaanModel.save(rs);
+        penyewaanModel.sql.getConnection().close(rs);
 
         updateTable();
     }//GEN-LAST:event_nextPaginationButtonActionPerformed
@@ -663,6 +668,7 @@ public class view extends javax.swing.JPanel {
         penyewaanModel.sql.select.offset(newOffset);
         ResultSet rs = penyewaanModel.sql.select.execute();
         penyewaanModel.save(rs);
+        penyewaanModel.sql.getConnection().close(rs);
 
         updateTable();
     }//GEN-LAST:event_lastPaginationButtonActionPerformed
@@ -805,6 +811,7 @@ public class view extends javax.swing.JPanel {
         penyewaanModel.sql.select.offset(newOffset);
         ResultSet rs = penyewaanModel.sql.select.execute();
         penyewaanModel.save(rs);
+        penyewaanModel.sql.getConnection().close(rs);
 
         updateTable();
     }//GEN-LAST:event_pencarianFieldActionPerformed
